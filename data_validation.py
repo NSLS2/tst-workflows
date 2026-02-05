@@ -1,5 +1,7 @@
+import os
+
+from dotenv import load_dotenv
 from prefect import task, flow, get_run_logger
-from prefect.blocks.system import Secret
 import time as ttime
 from tiled.client import from_uri
 
@@ -7,9 +9,11 @@ from tiled.client import from_uri
 @task(retries=2, retry_delay_seconds=10)
 def read_run(uid, api_key=None):
     logger = get_run_logger()
-    if not api_key:
-        api_key = Secret.load("tiled-tst-api-key").get()
-    cl = from_uri("https://tiled.nsls2.bnl.gov", api_key=api_key)
+    with open("/srv/env.secrets", "r") as secrets:
+        load_dotenv(stream=secrets)
+    api_key = os.environ["TILED_API_KEY"]
+    logger.info(f"first 4 characters of key: {api_key[:4]}")
+    cl = from_profile("nsls2", api_key=api_key)
     run = cl["tst"]["raw"][uid]
     logger.info(f"Validating uid {run.start['uid']}")
     return run
