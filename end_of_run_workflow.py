@@ -1,6 +1,8 @@
 from prefect import task, flow, get_run_logger
 from data_validation import data_validation
 from test_extra_client import get_other_docs
+from prefect.blocks.notifications import SlackWebhook
+from prefect.context import FlowRunContext
 # from long_flow import long_flow
 
 
@@ -10,7 +12,28 @@ def log_completion():
     logger.info("Complete")
 
 
+def slack(func):
+    def wrapper(*args, **kwargs):
+        logger = get_run_logger()
+        flow_run_name = FlowRunContext.get().flow_run.dict().get("name")
+        slack_webhook = SlackWebhook.load("mon-prefect")
+
+        try:
+            logger.info(f"Flow run info: {FlowRunContext.get().flow_run.dict()}")
+            result = func(*args, **kwargs)
+            slack_webhook.notify(
+                f":white_check_mark: Flow-run successful. (*{flow_run_name}*)"
+            )
+            return result
+        except Exception:
+            slack_webhook.notify(f":bangbang: Flow-run failed. (*{flow_run_name}*)")
+            raise
+
+    return wrapper
+
+
 @flow
+@slack
 def end_of_run_workflow(stop_doc):
     uid = stop_doc["run_start"]
     # hello_world()
