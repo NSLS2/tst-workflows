@@ -13,14 +13,14 @@ def log_completion():
 
 
 def slack(func):
-    def wrapper(*args, **kwargs):
+    def end_of_run_workflow(stop_doc):
         logger = get_run_logger()
         flow_run_name = FlowRunContext.get().flow_run.dict().get("name")
         slack_webhook = SlackWebhook.load("mon-prefect")
 
         try:
             logger.info(f"Flow run info: {FlowRunContext.get().flow_run.dict()}")
-            result = func(*args, **kwargs)
+            result = func(stop_doc)
             slack_webhook.notify(
                 f":white_check_mark: Flow-run successful. (*{flow_run_name}*)"
             )
@@ -29,7 +29,7 @@ def slack(func):
             slack_webhook.notify(f":bangbang: Flow-run failed. (*{flow_run_name}*)")
             raise
 
-    return wrapper
+    return end_of_run_workflow
 
 
 @flow
