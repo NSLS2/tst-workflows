@@ -5,16 +5,16 @@ from test_extra_client import get_other_docs
 
 
 @task
-def log_completion():
+def log_completion(dry_run=False):
     logger = get_run_logger()
-    logger.info("Complete")
+    logger.info(f"Complete! dry_run:{dry_run}")
 
 
 @flow
-def end_of_run_workflow(stop_doc):
+def end_of_run_workflow(stop_doc, dry_run=False):
     uid = stop_doc["run_start"]
     # hello_world()
-    data_validation(uid, return_state=True)
-    get_other_docs(uid)
-    # long_flow(iterations=100, sleep_length=10)
-    log_completion()
+    data_validation(uid, return_state=True, dry_run=dry_run)
+    get_other_docs(uid, dry_run=dry_run)
+    # long_flow(iterations=100, sleep_length=10, dry_run=dry_run)
+    log_completion(dry_run=dry_run)
