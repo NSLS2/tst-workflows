@@ -28,13 +28,13 @@ def read_all_streams(uid, beamline_acronym):
 
 
 @task
-def test_print(root_client):
-    logger2.warning(f"logging testtesttest: {root_client}")
+def test_print():
+    logger2.warning(f"logging testtesttest")
 
 
 @flow
 def data_validation(uid):
+    test_print()
     cl = from_profile("nsls2")
     root_client = cl["tst"]["raw"][uid]
-    test_print(root_client)
     read_all_streams(uid, beamline_acronym="tst")
