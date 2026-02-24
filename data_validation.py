@@ -27,8 +27,9 @@ def read_all_streams(uid, beamline_acronym):
     logger.info(f"{elapsed_time = }")
 
 
-@task
+@task(log_prints=True)
 def test_print():
+    print(f"name of Logger: {logger2.name}")
     logger2.warning("logging testtesttest")
 
 
