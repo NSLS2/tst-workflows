@@ -2,7 +2,10 @@ from prefect import task, flow, get_run_logger
 from prefect.blocks.system import Secret
 import time as ttime
 from tiled.client import from_profile
-
+from bluesky_tiled_plugins.writing.validator import validate
+import logging
+logger2 = logging.getLogger(__name__)
+logger2.setLevel("INFO")
 
 @task(retries=2, retry_delay_seconds=10)
 def read_all_streams(uid, beamline_acronym):
@@ -23,6 +26,14 @@ def read_all_streams(uid, beamline_acronym):
     logger.info(f"{elapsed_time = }")
 
 
+@task
+def test_print(root_client):
+    logger2.warning(f"logging testtesttest: {root_client}")
+
+
 @flow
 def data_validation(uid):
+    cl = from_profile("nsls2")
+    root_client = cl["tst"]["raw"][uid]
+    test_print(root_client)
     read_all_streams(uid, beamline_acronym="tst")
