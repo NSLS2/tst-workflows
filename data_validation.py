@@ -2,6 +2,10 @@ from prefect import task, flow, get_run_logger
 from prefect.blocks.system import Secret
 import time as ttime
 from tiled.client import from_profile
+import logging
+
+logger2 = logging.getLogger(__name__)
+logger2.setLevel("INFO")
 
 
 @task(retries=2, retry_delay_seconds=10)
@@ -23,6 +27,13 @@ def read_all_streams(uid, beamline_acronym):
     logger.info(f"{elapsed_time = }")
 
 
+@task(log_prints=True)
+def test_print():
+    print(f"name of Logger: {logger2.name}")
+    logger2.warning("logging testtesttest")
+
+
 @flow
 def data_validation(uid):
+    test_print()
     read_all_streams(uid, beamline_acronym="tst")
