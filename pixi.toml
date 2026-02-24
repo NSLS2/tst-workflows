@@ -11,3 +11,9 @@ bluesky-tiled-plugins = ">=2"
 
 [pypi-dependencies]
 lixtools = "==2023.1.23.0"
+
+[feature.test.dependencies]
+pytest = "*"
+
+[environments]
+test = ["test"]
