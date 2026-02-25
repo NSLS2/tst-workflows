@@ -3,8 +3,11 @@ from utils import get_tiled_client
 
 
 @task
-def get_other_docs(uid):
+def get_other_docs(uid, dry_run=False):
     logger = get_run_logger()
-    result = get_tiled_client()["raw"][uid]
-    for name, doc in result.documents():
-        logger.info(f"name: {name}, doc: {doc}")
+    if not dry_run:
+        result = get_tiled_client()["raw"][uid]
+        for name, doc in result.documents():
+            logger.info(f"name: {name}, doc: {doc}")
+    else:
+        logger.info("Dry run: not getting docs")
