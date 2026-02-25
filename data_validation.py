@@ -5,11 +5,13 @@ from tiled.client import from_profile
 
 
 @task(retries=2, retry_delay_seconds=10)
-def read_run(client, uid, dry_run=False):
+def read_run(client, uid, api_key=None):
     logger = get_run_logger()
-    if dry_run:
-        logger.info(f"Dry run: not reading {uid}")
-        return None
+    try:
+        if not api_key:
+            api_key = Secret.load("tiled-tst-api-key").get()
+    finally:
+        cl = from_profile("nsls2", api_key=api_key)
     run = client["tst"]["raw"][uid]
     logger.info(f"Validating uid {run.start['uid']}")
     return run
@@ -21,11 +23,12 @@ def read_stream(run, stream):
 
 
 @flow
-def read_all_streams(uid, beamline_acronym, dry_run=False):
+def read_all_streams(uid, beamline_acronym, dry_run=False, api_key=None):
     logger = get_run_logger()
-    api_key = Secret.load("tiled-tst-api-key").get()
-    cl = from_profile("nsls2", api_key=api_key)
-    run = read_run(cl, uid, dry_run)
+    if dry_run:
+        logger.info(f"Dry run: not creating Tiled client")
+    else:
+        run = read_run(cl, uid, api_key)
     start_time = ttime.monotonic()
     if dry_run:
         logger.info(f"Dry run: not reading streams from uid {uid}")
@@ -42,5 +45,5 @@ def read_all_streams(uid, beamline_acronym, dry_run=False):
 
 
 @flow
-def data_validation(uid, dry_run=False):
-    read_all_streams(uid, beamline_acronym="tst", dry_run=dry_run)
+def data_validation(uid, dry_run=False, api_key=None):
+    read_all_streams(uid, beamline_acronym="tst", dry_run=dry_run, api_key=api_key)
