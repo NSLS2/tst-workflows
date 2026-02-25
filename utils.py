@@ -1,7 +1,6 @@
 from tiled.client import from_uri
 from prefect.blocks.system import Secret
 
-import os
 
 LOCATION = "tst"
 

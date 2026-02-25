@@ -7,7 +7,7 @@ from test_extra_client import get_other_docs
 @task
 def log_completion(dry_run=False):
     logger = get_run_logger()
-    logger.info(f"Complete! dry_run:{dry_run}")
+    logger.info(f"Complete! dry_run: {dry_run}")
 
 
 @flow
