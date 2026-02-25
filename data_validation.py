@@ -21,7 +21,7 @@ def read_stream(run, stream):
 
 
 @flow
-def read_all_streams(uid, beamline_acronym, dry_run=False, api_key=None):
+def data_validation(uid, beamline_acronym="tst", dry_run=False, api_key=None):
     logger = get_run_logger()
     if dry_run:
         logger.info("Dry run: not creating Tiled client")
@@ -40,8 +40,3 @@ def read_all_streams(uid, beamline_acronym, dry_run=False, api_key=None):
             logger.info(f"{stream} nbytes = {stream_data.nbytes:_}")
     elapsed_time = ttime.monotonic() - start_time
     logger.info(f"{elapsed_time = }")
-
-
-@flow
-def data_validation(uid, dry_run=False, api_key=None):
-    read_all_streams(uid, beamline_acronym="tst", dry_run=dry_run, api_key=api_key)
