@@ -6,8 +6,8 @@ import os
 LOCATION = "tst"
 
 
-def get_tiled_client():
-    os.environ["TILED_API_KEY"] = Secret.load(f"tiled-{LOCATION}-api-key").get()
-    tiled_client = from_profile("nsls2")[LOCATION]
-    os.environ.pop("TILED_API_KEY")
+def get_tiled_client(api_key=None):
+    if not api_key:
+        api_key = Secret.load(f"tiled-{LOCATION}-api-key").get()
+    tiled_client = from_profile("nsls2", api_key=api_key)[LOCATION]
     return tiled_client
