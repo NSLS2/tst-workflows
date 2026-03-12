@@ -1,5 +1,4 @@
 import os
-import sys
 
 from prefect import task, flow, get_run_logger
 from data_validation import data_validation
