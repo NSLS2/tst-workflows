@@ -28,14 +28,8 @@ def end_of_run_workflow(stop_doc, dry_run=False, api_key=None):
     # hello_world()
     if not api_key:
         api_key = get_api_key_from_env(api_key=api_key)
-    data_validation(uid, return_state=True, dry_run=dry_run, api_key=api_key)
-    get_other_docs(uid, dry_run=dry_run, api_key=api_key)
+    data_validation(uid, api_key=api_key)
+    get_other_docs(uid, api_key=api_key)
     # long_flow(iterations=100, sleep_length=10, dry_run=dry_run)
     log_completion(dry_run=dry_run)
     return True
-
-
-if __name__ == "__main__":
-    tiled_api_key = os.environ["TEST_TILED_API_KEY"]
-    stop_doc = sys.argv[1]
-    end_of_run_workflow(stop_doc, api_key=tiled_api_key)
