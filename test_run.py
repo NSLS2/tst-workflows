@@ -14,6 +14,6 @@ def test_end_of_run_workflow(prefect_disable_logging):
     print("starting test!")
     assert end_of_run_workflow(
         stop_doc={"run_start": "f0954c84-f652-4350-9f6d-44b724f4ed9f"},
-        api_key=os.environ["TILED_API_KEY"],
+        api_key=os.environ["TEST_TILED_API_KEY"],
     )
     print("finished test!")
