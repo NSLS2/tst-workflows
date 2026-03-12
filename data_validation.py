@@ -8,9 +8,6 @@ from tiled.client import from_uri
 
 @task(retries=2, retry_delay_seconds=10)
 def get_run(uid, api_key=None):
-    with open("/srv/env.secrets", "r") as secrets:
-        load_dotenv(stream=secrets)
-    api_key = os.environ["TILED_API_KEY"]
     cl = from_uri("https://tiled.nsls2.bnl.gov", api_key=api_key)
     run = cl["tst/raw"][uid]
     return run

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 @task
 def get_api_key_from_env(api_key=None):
-    with open("/srv/tiled.secret", "r") as secrets:
+    with open("/srv/container.secret", "r") as secrets:
         load_dotenv(stream=secrets)
     api_key = os.environ["TILED_API_KEY"]
     return api_key
