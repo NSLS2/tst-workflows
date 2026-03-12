@@ -8,6 +8,13 @@ prefect = "3.*"
 python = "<3.14"
 tiled-client = ">=0.2.3"
 bluesky-tiled-plugins = ">=2"
+python-dotenv = ">=1.2.1,<2"
 
 [pypi-dependencies]
 lixtools = "==2023.1.23.0"
+
+[feature.test.dependencies]
+pytest = "*"
+
+[environments]
+test = ["test"]

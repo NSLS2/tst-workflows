@@ -24,14 +24,12 @@ deployments:
     schedule: {}
     work_pool:
       job_variables:
-        env:
-          TILED_SITE_PROFILES: /nsls2/software/etc/tiled/profiles
         image: ghcr.io/nsls2/tst-workflows:main
         image_pull_policy: Always
         network_mode: slirp4netns
         userns: "keep-id:uid=402974,gid=402974" # workflow-tst:workflow-tst
         volumes:
           - /nsls2/data/tst/proposals:/nsls2/data/tst/proposals
-          - /nsls2/software/etc/tiled:/nsls2/software/etc/tiled
+          - /srv/prefect3-docker-worker-tst/app:/srv
         auto_remove: true
       name: tst-work-pool-docker
